@@ -31,6 +31,7 @@ var hero = {
 };
 var monster = {};
 var monstersCaught = 0;
+var fps = 0;
 // Handle keyboard controls
 var keysDown = {};
 addEventListener("keydown", function (e) {
@@ -49,8 +50,15 @@ var reset = function () {
 	monster.x = 32 + (Math.random() * (canvas.width - 64));
 	monster.y = 32 + (Math.random() * (canvas.height - 64));
 };
+var f = 0;
 // Update game objects
 var update = function (modifier) {
+	if(f<10){
+		f++
+	}else {
+		fps = Math.floor(1/modifier);
+		f=0;
+	}
 	if (38 in keysDown || 87 in keysDown) { // Player holding up || w
 		hero.y -= hero.speed * modifier;
 	}
@@ -90,12 +98,13 @@ var render = function () {
 	ctx.font = "24px Helvetica";
 	ctx.textAlign = "left";
 	ctx.textBaseline = "top";
-	ctx.fillText("Goblins caught: " + monstersCaught, 32, 32);
+	ctx.fillText("Goblins caught: " + monstersCaught + ' / FPS:' + fps, 32, 32);
 };
 // The main game loop
 var main = function () {
 	var now = Date.now();
 	var delta = now - then;
+	console.log(delta);
 	update(delta / 1000);
 	render();
 	then = now;
